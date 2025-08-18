@@ -205,14 +205,6 @@ static const u8 sItemEffect_RareCandy[10] = {
     VITAMIN_FRIENDSHIP_CHANGE(7),
 };
 
-static const u8 sItemEffect_CapCandy[10] = {
-    [3] = ITEM3_LEVEL_UP,
-    [4] = ITEM4_REVIVE | ITEM4_HEAL_HP,
-    [5] = ITEM5_FRIENDSHIP_ALL,
-    [6] = ITEM6_HEAL_HP_LVL_UP,
-    VITAMIN_FRIENDSHIP_CHANGE(7),
-};
-
 static const u8 sItemEffect_PPUp[9] = {
     [4] = ITEM4_PP_UP,
     [5] = ITEM5_FRIENDSHIP_ALL,
@@ -339,6 +331,13 @@ static const u8 sItemEffect_SitrusBerry[7] = {
     [4] = ITEM4_HEAL_HP,
     [6] = 30, // Amount of HP to recover
 };
+static const u8 sItemEffect_CapCandy[10] = {
+    [3] = ITEM3_LEVEL_UP,
+    [4] = ITEM4_REVIVE | ITEM4_HEAL_HP,
+    [5] = ITEM5_FRIENDSHIP_ALL,
+    [6] = ITEM6_HEAL_HP_LVL_UP,
+    VITAMIN_FRIENDSHIP_CHANGE(7),
+};
 
 const u8 *const gItemEffectTable[] =
     {
@@ -415,8 +414,6 @@ const u8 *const gItemEffectTable[] =
             ITEM_POTION] = sItemEffect_Calcium,
         [ITEM_RARE_CANDY -
             ITEM_POTION] = sItemEffect_RareCandy,
-        [ITEM_CAP_CANDY -
-            ITEM_POTION] = sItemEffect_CapCandy,
         [ITEM_PP_UP -
             ITEM_POTION] = sItemEffect_PPUp,
         [ITEM_ZINC -
@@ -469,6 +466,8 @@ const u8 *const gItemEffectTable[] =
             ITEM_POTION] = sItemEffect_LumBerry,
         [ITEM_SITRUS_BERRY -
             ITEM_POTION] = sItemEffect_SitrusBerry,
+        [ITEM_CAP_CANDY -
+            ITEM_POTION] = sItemEffect_CapCandy,
         [LAST_BERRY_INDEX -
             ITEM_POTION] = NULL,
 };

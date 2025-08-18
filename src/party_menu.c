@@ -337,7 +337,8 @@ static void Task_HandleStopLearningMoveYesNoInput(u8 taskId);
 static void Task_TryLearningNextMoveAfterText(u8 taskId);
 static void ItemUseCB_RareCandyStep(u8 taskId, TaskFunc func);
 static void ItemUseCB_CapCandyStep(u8 taskId, TaskFunc func);
-static void Task_UseCapCandyAgain(u8 taskId);
+static void Task_HandleCapCandyLink(u8 taskId);
+static void Task_CapCandy_SilentChecks(u8 taskId);
 static void Task_DisplayLevelUpStatsPg1(u8 taskId);
 static void Task_DisplayLevelUpStatsPg2(u8 taskId);
 static void UpdateMonDisplayInfoAfterRareCandy(u8 slot, struct Pokemon *mon);
@@ -4536,9 +4537,16 @@ static void Task_ClosePartyMenuAfterText(u8 taskId)
 {
     if (IsPartyMenuTextPrinterActive() != TRUE)
     {
-        if (gPartyMenuUseExitCallback == FALSE)
-            sPartyMenuInternal->exitCallback = NULL;
-        Task_ClosePartyMenu(taskId);
+        if (gPartyMenu.capCandyInProgress)
+        {
+            Task_HandleCapCandyLink(taskId);
+        }
+        else
+        {
+            if (gPartyMenuUseExitCallback == FALSE)
+                sPartyMenuInternal->exitCallback = NULL;
+            Task_ClosePartyMenu(taskId);
+        }
     }
 }
 
@@ -5070,11 +5078,12 @@ void ItemUseCB_CapCandy(u8 taskId, TaskFunc func)
     u8 currentLevel = GetMonData(mon, MON_DATA_LEVEL);
     u8 levelCap = GetCurrentLevelCap();
 
+    gPartyMenu.capCandyInProgress = FALSE;
     // Check if already at level cap or max level
     if (currentLevel >= levelCap || currentLevel >= MAX_LEVEL)
         noEffect = TRUE;
     else
-        noEffect = PokemonItemUseNoEffect(mon, item, gPartyMenu.slotId, 0);
+        noEffect = FALSE;
 
     PlaySE(SE_SELECT);
     if (noEffect)
@@ -5086,6 +5095,7 @@ void ItemUseCB_CapCandy(u8 taskId, TaskFunc func)
     }
     else
     {
+        gPartyMenu.capCandyInProgress = TRUE;
         Task_DoUseItemAnim(taskId);
         gItemUseCB = ItemUseCB_CapCandyStep;
     }
@@ -5094,45 +5104,62 @@ void ItemUseCB_CapCandy(u8 taskId, TaskFunc func)
 static void ItemUseCB_CapCandyStep(u8 taskId, TaskFunc func)
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
-    u8 currentLevel = GetMonData(mon, MON_DATA_LEVEL);
-    u8 levelCap = GetCurrentLevelCap();
-    struct PartyMenuInternal *ptr = sPartyMenuInternal;
-    s16 *arrayPtr = ptr->data;
+    u8 level;
+    u32 exp;
 
-    // Get pre-level up stats
-    GetMonLevelUpWindowStats(mon, arrayPtr);
+    // Manually grant experience for one level
+    level = GetMonData(mon, MON_DATA_LEVEL);
+    if (level < MAX_LEVEL)
+    {
+        exp = gExperienceTables[gSpeciesInfo[GetMonData(mon, MON_DATA_SPECIES)].growthRate][level + 1];
+        SetMonData(mon, MON_DATA_EXP, &exp);
+        CalculateMonStats(mon);
+    }
 
-    // Apply level up once
-    ExecuteTableBasedItemEffect_(gPartyMenu.slotId, gSpecialVar_ItemId, 0);
-
-    // Get post-level up stats
-    GetMonLevelUpWindowStats(mon, &ptr->data[NUM_STATS]);
-
-    gPartyMenuUseExitCallback = TRUE;
-    ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, mon, gSpecialVar_ItemId, 0xFFFF);
-    PlayFanfareByFanfareNum(FANFARE_LEVEL_UP);
+    // Update HP bar and party menu display for the new level
     UpdateMonDisplayInfoAfterRareCandy(gPartyMenu.slotId, mon);
-    RemoveBagItem(gSpecialVar_ItemId, 1);
 
-    GetMonNickname(mon, gStringVar1);
-    currentLevel = GetMonData(mon, MON_DATA_LEVEL); // Get new level after level up
-    ConvertIntToDecimalStringN(gStringVar2, currentLevel, STR_CONV_MODE_LEFT_ALIGN, 3);
-    StringExpandPlaceholders(gStringVar4, gText_PkmnElevatedToLvVar2);
-    DisplayPartyMenuMessage(gStringVar4, TRUE);
-    ScheduleBgCopyTilemapToVram(2);
-
-    // If we haven't reached the cap and haven't hit MAX_LEVEL, continue with another candy
-    if (currentLevel < levelCap && currentLevel < MAX_LEVEL)
-        gTasks[taskId].func = Task_UseCapCandyAgain;
-    else
-        gTasks[taskId].func = Task_DisplayLevelUpStatsPg1;
+    // Silently check for moves and evolutions
+    gTasks[taskId].func = Task_CapCandy_SilentChecks;
 }
 
-static void Task_UseCapCandyAgain(u8 taskId)
+static void Task_HandleCapCandyLink(u8 taskId)
 {
-    if (!IsPartyMenuTextPrinterActive())
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    u8 level = GetMonData(mon, MON_DATA_LEVEL);
+    u8 levelCap = GetCurrentLevelCap();
+
+    if (level < levelCap && level < MAX_LEVEL)
     {
-        ItemUseCB_CapCandy(taskId, gTasks[taskId].func);
+        // Continue the loop
+        ItemUseCB_CapCandyStep(taskId, (TaskFunc)Task_ClosePartyMenuAfterText);
+    }
+    else
+    {
+        // End the loop
+        gPartyMenu.capCandyInProgress = FALSE;
+        Task_ClosePartyMenu(taskId);
+    }
+}
+
+static void Task_CapCandy_SilentChecks(u8 taskId)
+{
+    u16 learnMove = MonTryLearningNewMove(&gPlayerParty[gPartyMenu.slotId], TRUE);
+    gPartyMenu.learnMoveMethod = LEARN_VIA_LEVEL_UP;
+    switch (learnMove)
+    {
+    case MOVE_NONE: // No moves to learn
+        PartyMenuTryEvolution(taskId);
+        break;
+    case MON_HAS_MAX_MOVES:
+        DisplayMonNeedsToReplaceMove(taskId);
+        break;
+    case MON_ALREADY_KNOWS_MOVE:
+        gTasks[taskId].func = Task_TryLearningNextMove;
+        break;
+    default:
+        DisplayMonLearnedMove(taskId, learnMove);
+        break;
     }
 }
 
