@@ -1488,10 +1488,12 @@ void ForcePlayerToStartSurfing(void)
     SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_SURFING);
 }
 
+// RANDOMIZER_START
 static const u16 sStarterSpecies[] = {
     SPECIES_BULBASAUR,
     SPECIES_SQUIRTLE,
     SPECIES_CHARMANDER};
+// RANDOMIZER_END
 
 static u16 GetStarterSpeciesById(u16 idx)
 {
