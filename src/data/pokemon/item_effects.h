@@ -338,6 +338,11 @@ static const u8 sItemEffect_CapCandy[10] = {
     [6] = ITEM6_HEAL_HP_LVL_UP,
     VITAMIN_FRIENDSHIP_CHANGE(7),
 };
+static const u8 sItemEffect_PortablePC[7] = {
+    [3] = ITEM3_STATUS_ALL,
+    [4] = ITEM4_HEAL_HP,
+    [6] = ITEM6_HEAL_HP_FULL,
+};
 
 const u8 *const gItemEffectTable[] =
     {
@@ -468,6 +473,8 @@ const u8 *const gItemEffectTable[] =
             ITEM_POTION] = sItemEffect_SitrusBerry,
         [ITEM_CAP_CANDY -
             ITEM_POTION] = sItemEffect_CapCandy,
+        [ITEM_PORTABLE_PC -
+            ITEM_POTION] = sItemEffect_PortablePC,
         [LAST_BERRY_INDEX -
             ITEM_POTION] = NULL,
 };

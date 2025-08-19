@@ -431,6 +431,12 @@ void FieldUseFunc_CapCandy(u8 taskId)
     DoSetUpItemUseCallback(taskId);
 }
 
+void FieldUseFunc_PortablePC(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_PortablePC;
+    DoSetUpItemUseCallback(taskId);
+}
+
 void FieldUseFunc_EvoItem(u8 taskId)
 {
     gItemUseCB = ItemUseCB_EvolutionStone;

@@ -69,6 +69,8 @@
 #include "constants/quest_log.h"
 #include "constants/songs.h"
 #include "constants/sound.h"
+#include "script_pokemon_util.h"
+#include "event_scripts.h"
 
 #define PARTY_PAL_SELECTED (1 << 0)
 #define PARTY_PAL_FAINTED (1 << 1)
@@ -6437,4 +6439,10 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
         UnlockPlayerFieldControls();
         ScriptContext_Enable();
     }
+}
+
+void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
+{
+    ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
+    Task_ClosePartyMenu(taskId);
 }
