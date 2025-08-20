@@ -39,7 +39,8 @@
 #include "constants/songs.h"
 #include "constants/field_weather.h"
 #include "event_scripts.h"
-
+#include "constants/flags.h"
+#include "wild_encounter.h"
 static EWRAM_DATA void (*sItemUseOnFieldCB)(u8 taskId) = NULL;
 
 static void FieldCB_FadeInFromBlack(void);
@@ -440,7 +441,25 @@ void FieldUseFunc_PortablePC(u8 taskId)
 
 void FieldUseFunc_PermanentRepel(u8 taskId)
 {
-    gItemUseCB = ItemUseCB_PermanentRepel;
+    if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
+    {
+        // Turn OFF
+        FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        DisableWildEncounters(FALSE); // Apply immediate effect
+        StringExpandPlaceholders(gStringVar4, gText_EternalRepelOff);
+        PlaySE(SE_REPEL);
+    }
+    else
+    {
+        // Turn ON
+        FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        DisableWildEncounters(TRUE); // Apply immediate effect
+        StringExpandPlaceholders(gStringVar4, gText_EternalRepelOn);
+        PlaySE(SE_REPEL);
+    }
+
+    // Display the message ("...turned on." or "...turned off.")
+    DisplayPartyMenuMessage(gStringVar4, FALSE);
     DoSetUpItemUseCallback(taskId);
 }
 

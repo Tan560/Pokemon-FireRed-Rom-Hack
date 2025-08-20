@@ -407,7 +407,6 @@ static void ItemUseCB_ReplaceMoveWithTMHM(u8 taskId, TaskFunc func);
 static void Task_ReplaceMoveWithTMHM(u8 taskId);
 static void CB2_UseEvolutionStone(void);
 static bool8 MonCanEvolve(void);
-static void ItemUseCB_PermanentRepelStep(u8 taskId, TaskFunc func);
 
 static EWRAM_DATA struct PartyMenuInternal *sPartyMenuInternal = NULL;
 EWRAM_DATA struct PartyMenu gPartyMenu = {0};
@@ -6444,45 +6443,4 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
         UnlockPlayerFieldControls();
         ScriptContext_Enable();
     }
-}
-
-static void FieldCallback_RunHealScript(void)
-{
-    ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
-    ScriptContext_Enable();
-}
-
-void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
-{
-    sPartyMenuInternal->exitCallback = CB2_ReturnToField;
-    gPostMenuFieldCallback = FieldCallback_RunHealScript;
-    Task_ClosePartyMenu(taskId);
-}
-
-void ItemUseCB_PermanentRepel(u8 taskId, TaskFunc func)
-{
-    Task_DoUseItemAnim(taskId);
-    gItemUseCB = ItemUseCB_PermanentRepelStep;
-}
-
-static void ItemUseCB_PermanentRepelStep(u8 taskId, TaskFunc func)
-{
-    if (sPermanentRepelActive)
-    {
-        // Turn OFF
-        sPermanentRepelActive = FALSE;
-        DisableWildEncounters(FALSE); // Enable encounters
-        StringExpandPlaceholders(gStringVar4, gText_EternalRepelOff);
-        PlaySE(SE_REPEL);
-    }
-    else
-    {
-        // Turn ON
-        sPermanentRepelActive = TRUE;
-        DisableWildEncounters(TRUE); // Disable encounters
-        StringExpandPlaceholders(gStringVar4, gText_EternalRepelOn);
-        PlaySE(SE_REPEL);
-    }
-    DisableWildEncounters(TRUE);
-    DisplayPartyMenuMessage(gStringVar4, FALSE);
 }
