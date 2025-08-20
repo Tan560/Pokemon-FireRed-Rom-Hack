@@ -45,7 +45,7 @@
 static EWRAM_DATA u8 sElevatorCurrentFloorWindowId = 0;
 static EWRAM_DATA u16 sElevatorScroll = 0;
 static EWRAM_DATA u16 sElevatorCursorPos = 0;
-static EWRAM_DATA struct ListMenuItem * sListMenuItems = NULL;
+static EWRAM_DATA struct ListMenuItem *sListMenuItems = NULL;
 static EWRAM_DATA u16 sListMenuLastScrollPosition = 0;
 static EWRAM_DATA u8 sPCBoxToSendMon = 0;
 static EWRAM_DATA u8 sBrailleTextCursorSpriteID = 0;
@@ -64,7 +64,7 @@ static void AnimateElevatorWindowView(u16 nfloors, bool8 direction);
 static void Task_AnimateElevatorWindowView(u8 taskId);
 static void Task_CreateScriptListMenu(u8 taskId);
 static void CreateScriptListMenu(void);
-static void ScriptListMenuMoveCursorFunction(s32 nothing, bool8 is, struct ListMenu * used);
+static void ScriptListMenuMoveCursorFunction(s32 nothing, bool8 is, struct ListMenu *used);
 static void Task_ListMenuHandleInput(u8 taskId);
 static void Task_DestroyListMenu(u8 taskId);
 static void Task_SuspendListMenu(u8 taskId);
@@ -84,8 +84,7 @@ static void Task_WingFlapSound(u8 taskId);
 static u8 *const sStringVarPtrs[] = {
     gStringVar1,
     gStringVar2,
-    gStringVar3
-};
+    gStringVar3};
 
 void ShowDiploma(void)
 {
@@ -104,7 +103,6 @@ void ForcePlayerOntoBike(void)
 
 void ResetCyclingRoadChallengeData(void)
 {
-
 }
 
 u8 GetPlayerAvatarBike(void)
@@ -162,7 +160,7 @@ void SetHiddenItemFlag(void)
 
 u8 GetLeadMonFriendship(void)
 {
-    struct Pokemon * pokemon = &gPlayerParty[GetLeadMonIndex()];
+    struct Pokemon *pokemon = &gPlayerParty[GetLeadMonIndex()];
     if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) == 255)
         return 6;
     else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 200)
@@ -188,15 +186,13 @@ void ShowTownMap(void)
 bool8 PlayerHasGrassPokemonInParty(void)
 {
     u8 i;
-    struct Pokemon * pokemon;
+    struct Pokemon *pokemon;
     u16 species;
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
         pokemon = &gPlayerParty[i];
-        if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES)
-         && !GetMonData(pokemon, MON_DATA_IS_EGG)
-        )
+        if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && !GetMonData(pokemon, MON_DATA_IS_EGG))
         {
             species = GetMonData(pokemon, MON_DATA_SPECIES);
             if (gSpeciesInfo[species].types[0] == TYPE_GRASS || gSpeciesInfo[species].types[1] == TYPE_GRASS)
@@ -356,8 +352,7 @@ static const u8 sSlotMachineRandomSeeds[] = {
     3,
     10,
     9,
-    6
-};
+    6};
 
 static const u8 sSlotMachineIndices[] = {
     0,
@@ -381,8 +376,7 @@ static const u8 sSlotMachineIndices[] = {
     3,
     4,
     4,
-    5
-};
+    5};
 
 u8 GetRandomSlotMachineId(void)
 {
@@ -452,11 +446,11 @@ bool8 IsPokerusInParty(void)
         return TRUE;
 }
 
-#define tXtrans   data[0]
-#define tTimer    data[1]
-#define tNremain  data[2]
+#define tXtrans data[0]
+#define tTimer data[1]
+#define tNremain data[2]
 #define tDuration data[3]
-#define tYtrans   data[4]
+#define tYtrans data[4]
 
 void ShakeScreen(void)
 {
@@ -511,7 +505,7 @@ u8 GetLeadMonIndex(void)
 {
     u8 partyCount = CalculatePlayerPartyCount();
     u8 i;
-    struct Pokemon * pokemon;
+    struct Pokemon *pokemon;
     for (i = 0; i < partyCount; i++)
     {
         pokemon = &gPlayerParty[i];
@@ -529,7 +523,7 @@ u16 GetPartyMonSpecies(void)
 bool8 IsMonOTNameNotPlayers(void)
 {
     GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_OT_NAME, gStringVar1);
-    
+
     if (!StringCompare(gSaveBlock2Ptr->playerName, gStringVar1))
         return FALSE;
     else
@@ -539,7 +533,6 @@ bool8 IsMonOTNameNotPlayers(void)
 // Used to nop all the unused specials from RS
 void NullFieldSpecial(void)
 {
-
 }
 
 void DoPicboxCancel(void)
@@ -655,8 +648,7 @@ static const u16 sResortGorgeousDeluxeRewards[] = {
     ITEM_STARDUST,
     ITEM_STAR_PIECE,
     ITEM_NUGGET,
-    ITEM_RARE_CANDY
-};
+    ITEM_RARE_CANDY};
 
 void IncrementResortGorgeousStepCounter(void)
 {
@@ -731,8 +723,7 @@ static const struct WindowTemplate sElevatorCurrentFloorWindowTemplate = {
     .width = 7,
     .height = 4,
     .paletteNum = 15,
-    .baseBlock = 0x008
-};
+    .baseBlock = 0x008};
 
 static const u8 *const sFloorNamePointers[] = {
     gText_B4F,
@@ -750,8 +741,7 @@ static const u8 *const sFloorNamePointers[] = {
     gText_9F,
     gText_10F,
     gText_11F,
-    gText_Rooftop
-};
+    gText_Rooftop};
 
 // Unused
 static const u8 sFloorNameWidthPadding[] = {
@@ -770,44 +760,29 @@ static const u8 sFloorNameWidthPadding[] = {
     30,
     26,
     26,
-    18
-};
+    18};
 
 static const u16 sElevatorWindowMetatilesGoingUp[][3] = {
-    {
-        METATILE_SilphCo_ElevatorWindow_Top0, 
-        METATILE_SilphCo_ElevatorWindow_Top1, 
-        METATILE_SilphCo_ElevatorWindow_Top2
-    },
-    {
-        METATILE_SilphCo_ElevatorWindow_Mid0, 
-        METATILE_SilphCo_ElevatorWindow_Mid1, 
-        METATILE_SilphCo_ElevatorWindow_Mid2
-    },
-    {
-        METATILE_SilphCo_ElevatorWindow_Bottom0, 
-        METATILE_SilphCo_ElevatorWindow_Bottom1, 
-        METATILE_SilphCo_ElevatorWindow_Bottom2
-    }
-};
+    {METATILE_SilphCo_ElevatorWindow_Top0,
+     METATILE_SilphCo_ElevatorWindow_Top1,
+     METATILE_SilphCo_ElevatorWindow_Top2},
+    {METATILE_SilphCo_ElevatorWindow_Mid0,
+     METATILE_SilphCo_ElevatorWindow_Mid1,
+     METATILE_SilphCo_ElevatorWindow_Mid2},
+    {METATILE_SilphCo_ElevatorWindow_Bottom0,
+     METATILE_SilphCo_ElevatorWindow_Bottom1,
+     METATILE_SilphCo_ElevatorWindow_Bottom2}};
 
 static const u16 sElevatorWindowMetatilesGoingDown[][3] = {
-    {
-        METATILE_SilphCo_ElevatorWindow_Top0, 
-        METATILE_SilphCo_ElevatorWindow_Top2, 
-        METATILE_SilphCo_ElevatorWindow_Top1
-    },
-    {
-        METATILE_SilphCo_ElevatorWindow_Mid0, 
-        METATILE_SilphCo_ElevatorWindow_Mid2, 
-        METATILE_SilphCo_ElevatorWindow_Mid1
-    },
-    {
-        METATILE_SilphCo_ElevatorWindow_Bottom0, 
-        METATILE_SilphCo_ElevatorWindow_Bottom2, 
-        METATILE_SilphCo_ElevatorWindow_Bottom1
-    }
-};
+    {METATILE_SilphCo_ElevatorWindow_Top0,
+     METATILE_SilphCo_ElevatorWindow_Top2,
+     METATILE_SilphCo_ElevatorWindow_Top1},
+    {METATILE_SilphCo_ElevatorWindow_Mid0,
+     METATILE_SilphCo_ElevatorWindow_Mid2,
+     METATILE_SilphCo_ElevatorWindow_Mid1},
+    {METATILE_SilphCo_ElevatorWindow_Bottom0,
+     METATILE_SilphCo_ElevatorWindow_Bottom2,
+     METATILE_SilphCo_ElevatorWindow_Bottom1}};
 
 static const u8 sElevatorAnimationDuration[] = {
     8,
@@ -818,8 +793,7 @@ static const u8 sElevatorAnimationDuration[] = {
     46,
     53,
     56,
-    57
-};
+    57};
 
 static const u8 sElevatorWindowAnimDuration[] = {
     3,
@@ -830,8 +804,7 @@ static const u8 sElevatorWindowAnimDuration[] = {
     18,
     21,
     24,
-    27
-};
+    27};
 
 void GetElevatorFloor(void)
 {
@@ -1168,7 +1141,7 @@ void ListMenu(void)
 
     if (QL_AvoidDisplay(QL_DestroyAbortedDisplay) == TRUE)
         return;
-        
+
     taskId = CreateTask(Task_CreateScriptListMenu, 8);
     task = &gTasks[taskId];
     switch (gSpecialVar_0x8004)
@@ -1255,40 +1228,40 @@ void ListMenu(void)
 }
 
 static const u8 *const sListMenuLabels[][12] = {
-    [LISTMENU_BADGES] = 
-    {
-        gText_BoulderBadge,
-        gText_CascadeBadge,
-        gText_ThunderBadge,
-        gText_RainbowBadge,
-        gText_SoulBadge,
-        gText_MarshBadge,
-        gText_VolcanoBadge,
-        gText_EarthBadge,
-        gOtherText_Exit,
-    }, 
-    [LISTMENU_SILPHCO_FLOORS] = 
-    {
-        gText_11F,
-        gText_10F,
-        gText_9F,
-        gText_8F,
-        gText_7F,
-        gText_6F,
-        gText_5F,
-        gText_4F,
-        gText_3F,
-        gText_2F,
-        gText_1F,
-        gOtherText_Exit,
-    }, 
+    [LISTMENU_BADGES] =
+        {
+            gText_BoulderBadge,
+            gText_CascadeBadge,
+            gText_ThunderBadge,
+            gText_RainbowBadge,
+            gText_SoulBadge,
+            gText_MarshBadge,
+            gText_VolcanoBadge,
+            gText_EarthBadge,
+            gOtherText_Exit,
+        },
+    [LISTMENU_SILPHCO_FLOORS] =
+        {
+            gText_11F,
+            gText_10F,
+            gText_9F,
+            gText_8F,
+            gText_7F,
+            gText_6F,
+            gText_5F,
+            gText_4F,
+            gText_3F,
+            gText_2F,
+            gText_1F,
+            gOtherText_Exit,
+        },
     [LISTMENU_ROCKET_HIDEOUT_FLOORS] = // Unncessary, MULTICHOICE_ROCKET_HIDEOUT_ELEVATOR is used instead
     {
         gText_B1F,
         gText_B2F,
         gText_B4F,
         gOtherText_Exit,
-    }, 
+    },
     [LISTMENU_DEPT_STORE_FLOORS] = // Unncessary, MULTICHOICE_DEPT_STORE_ELEVATOR is used instead
     {
         gText_5F,
@@ -1297,36 +1270,35 @@ static const u8 *const sListMenuLabels[][12] = {
         gText_2F,
         gText_1F,
         gOtherText_Exit,
-    }, 
+    },
     [LISTMENU_WIRELESS_LECTURE_HEADERS] = // Unnecessary, MULTICHOICE_LINKED_DIRECT_UNION is used instead
     {
         gText_LinkedGamePlay,
         gText_DirectCorner,
         gText_UnionRoom,
         gOtherText_Quit,
-    }, 
-    [LISTMENU_BERRY_POWDER] = 
-    {
-        gText_Energypowder_50,
-        gText_EnergyRoot_80,
-        gText_HealPowder_50,
-        gText_RevivalHerb_300,
-        gText_Protein_1000,
-        gText_Iron_1000,
-        gText_Carbos_1000,
-        gText_Calcium_1000,
-        gText_Zinc_1000,
-        gText_HpUp_1000,
-        gText_PpUp_3000,
-        gOtherText_Exit,
-    }, 
+    },
+    [LISTMENU_BERRY_POWDER] =
+        {
+            gText_Energypowder_50,
+            gText_EnergyRoot_80,
+            gText_HealPowder_50,
+            gText_RevivalHerb_300,
+            gText_Protein_1000,
+            gText_Iron_1000,
+            gText_Carbos_1000,
+            gText_Calcium_1000,
+            gText_Zinc_1000,
+            gText_HpUp_1000,
+            gText_PpUp_3000,
+            gOtherText_Exit,
+        },
     [LISTMENU_TRAINER_TOWER_FLOORS] = // Unnecessary, MULTICHOICE_ROOFTOP_B1F is used instead
     {
         gText_Rooftop,
         gText_B1F,
         gOtherText_Exit,
-    }
-};
+    }};
 
 static void Task_CreateScriptListMenu(u8 taskId)
 {
@@ -1390,7 +1362,7 @@ static void CreateScriptListMenu(void)
     sFieldSpecialsListMenuTemplate.cursorKind = 0;
 }
 
-static void ScriptListMenuMoveCursorFunction(s32 nothing, bool8 is, struct ListMenu * used)
+static void ScriptListMenuMoveCursorFunction(s32 nothing, bool8 is, struct ListMenu *used)
 {
     u8 taskId;
     struct Task *task;
@@ -1410,7 +1382,8 @@ static void Task_ListMenuHandleInput(u8 taskId)
     struct Task *task;
 
     task = &gTasks[taskId];
-    task++;task--;
+    task++;
+    task--;
     input = ListMenu_ProcessInput(task->data[14]);
     switch (input)
     {
@@ -1489,8 +1462,7 @@ static void Task_CreateMenuRemoveScrollIndicatorArrowPair(u8 taskId)
         .firstArrowType = 2,
         .secondArrowType = 3,
         .tileTag = 2000,
-        .palTag = 100
-    };
+        .palTag = 100};
     if (task->data[0] != task->data[1])
     {
         template.firstX = 4 * task->data[4] + 8 * task->data[2];
@@ -1516,11 +1488,12 @@ void ForcePlayerToStartSurfing(void)
     SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_SURFING);
 }
 
+// RANDOMIZER_START
 static const u16 sStarterSpecies[] = {
     SPECIES_BULBASAUR,
     SPECIES_SQUIRTLE,
-    SPECIES_CHARMANDER
-};
+    SPECIES_CHARMANDER};
+// RANDOMIZER_END
 
 static u16 GetStarterSpeciesById(u16 idx)
 {
@@ -1571,7 +1544,7 @@ u8 ContextNpcGetTextColor(void)
 
 static bool8 HasMonBeenRenamed(u8 idx)
 {
-    struct Pokemon * pokemon = &gPlayerParty[idx];
+    struct Pokemon *pokemon = &gPlayerParty[idx];
     u8 language;
     GetMonData(pokemon, MON_DATA_NICKNAME, gStringVar1);
     language = GetMonData(pokemon, MON_DATA_LANGUAGE, &language);
@@ -1618,7 +1591,7 @@ s32 CountDigits(s32 number)
 
 bool8 NameRaterWasNicknameChanged(void)
 {
-    struct Pokemon * pokemon = &gPlayerParty[gSpecialVar_0x8004];
+    struct Pokemon *pokemon = &gPlayerParty[gSpecialVar_0x8004];
     GetMonData(pokemon, MON_DATA_NICKNAME, gStringVar1);
     if (StringCompare(gStringVar3, gStringVar1) == 0)
         return FALSE;
@@ -1628,11 +1601,10 @@ bool8 NameRaterWasNicknameChanged(void)
 
 void ChangeBoxPokemonNickname(void)
 {
-    struct BoxPokemon * pokemon = GetBoxedMonPtr(gSpecialVar_MonBoxId, gSpecialVar_MonBoxPos);
+    struct BoxPokemon *pokemon = GetBoxedMonPtr(gSpecialVar_MonBoxId, gSpecialVar_MonBoxPos);
     u16 species;
     u8 gender;
     u32 personality;
-
 
     GetBoxMonData(pokemon, MON_DATA_NICKNAME, gStringVar3);
     GetBoxMonData(pokemon, MON_DATA_NICKNAME, gStringVar2);
@@ -1777,19 +1749,18 @@ bool8 DoesPlayerPartyContainSpecies(void)
 }
 
 static const u8 sMartMaps[][3] = {
-    {MAP(MAP_VIRIDIAN_CITY_MART),   1},
-    {MAP(MAP_PEWTER_CITY_MART),     3},
-    {MAP(MAP_CERULEAN_CITY_MART),   1},
-    {MAP(MAP_LAVENDER_TOWN_MART),   1},
-    {MAP(MAP_VERMILION_CITY_MART),  1},
-    {MAP(MAP_FUCHSIA_CITY_MART),    1},
+    {MAP(MAP_VIRIDIAN_CITY_MART), 1},
+    {MAP(MAP_PEWTER_CITY_MART), 3},
+    {MAP(MAP_CERULEAN_CITY_MART), 1},
+    {MAP(MAP_LAVENDER_TOWN_MART), 1},
+    {MAP(MAP_VERMILION_CITY_MART), 1},
+    {MAP(MAP_FUCHSIA_CITY_MART), 1},
     {MAP(MAP_CINNABAR_ISLAND_MART), 1},
-    {MAP(MAP_SAFFRON_CITY_MART),    1},
-    {MAP(MAP_THREE_ISLAND_MART),    1},
-    {MAP(MAP_FOUR_ISLAND_MART),     1},
-    {MAP(MAP_SEVEN_ISLAND_MART),    1},
-    {MAP(MAP_SIX_ISLAND_MART),      1}
-};
+    {MAP(MAP_SAFFRON_CITY_MART), 1},
+    {MAP(MAP_THREE_ISLAND_MART), 1},
+    {MAP(MAP_FOUR_ISLAND_MART), 1},
+    {MAP(MAP_SEVEN_ISLAND_MART), 1},
+    {MAP(MAP_SIX_ISLAND_MART), 1}};
 
 u8 GetMartClerkObjectId(void)
 {
@@ -1807,64 +1778,64 @@ void SetUsedPkmnCenterQuestLogEvent(void)
     SetQuestLogEvent(QL_EVENT_USED_PKMN_CENTER, NULL);
 }
 
-static const struct {
+static const struct
+{
     u16 inside_grp;
     u16 inside_num;
     u16 outside_grp;
     u16 outside_num;
 } sInsideOutsidePairs[] = {
-    [QL_LOCATION_HOME]               = {MAP(MAP_PALLET_TOWN_PLAYERS_HOUSE_1F),          MAP(MAP_PALLET_TOWN)},
-    [QL_LOCATION_OAKS_LAB]           = {MAP(MAP_PALLET_TOWN_PROFESSOR_OAKS_LAB),        MAP(MAP_PALLET_TOWN)},
-    [QL_LOCATION_VIRIDIAN_GYM]       = {MAP(MAP_VIRIDIAN_CITY_GYM),                     MAP(MAP_VIRIDIAN_CITY)},
-    [QL_LOCATION_LEAGUE_GATE_1]      = {MAP(MAP_ROUTE22_NORTH_ENTRANCE),                MAP(MAP_ROUTE22)},
-    [QL_LOCATION_LEAGUE_GATE_2]      = {MAP(MAP_ROUTE22_NORTH_ENTRANCE),                MAP(MAP_ROUTE23)},
-    [QL_LOCATION_VIRIDIAN_FOREST_1]  = {MAP(MAP_VIRIDIAN_FOREST),                       MAP(MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE)},
-    [QL_LOCATION_VIRIDIAN_FOREST_2]  = {MAP(MAP_VIRIDIAN_FOREST),                       MAP(MAP_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE)},
-    [QL_LOCATION_PEWTER_MUSEUM]      = {MAP(MAP_PEWTER_CITY_MUSEUM_1F),                 MAP(MAP_PEWTER_CITY)},
-    [QL_LOCATION_PEWTER_GYM]         = {MAP(MAP_PEWTER_CITY_GYM),                       MAP(MAP_PEWTER_CITY)},
-    [QL_LOCATION_MT_MOON_1]          = {MAP(MAP_MT_MOON_1F),                            MAP(MAP_ROUTE4)},
-    [QL_LOCATION_MT_MOON_2]          = {MAP(MAP_MT_MOON_B1F),                           MAP(MAP_ROUTE4)},
-    [QL_LOCATION_CERULEAN_GYM]       = {MAP(MAP_CERULEAN_CITY_GYM),                     MAP(MAP_CERULEAN_CITY)},
-    [QL_LOCATION_BIKE_SHOP]          = {MAP(MAP_CERULEAN_CITY_BIKE_SHOP),               MAP(MAP_CERULEAN_CITY)},
-    [QL_LOCATION_BILLS_HOUSE]        = {MAP(MAP_ROUTE25_SEA_COTTAGE),                   MAP(MAP_ROUTE25)},
-    [QL_LOCATION_DAY_CARE]           = {MAP(MAP_ROUTE5_POKEMON_DAY_CARE),               MAP(MAP_ROUTE5)},
-    [QL_LOCATION_UNDERGROUND_PATH_1] = {MAP(MAP_UNDERGROUND_PATH_NORTH_ENTRANCE),       MAP(MAP_ROUTE5)},
-    [QL_LOCATION_UNDERGROUND_PATH_2] = {MAP(MAP_UNDERGROUND_PATH_SOUTH_ENTRANCE),       MAP(MAP_ROUTE6)},
-    [QL_LOCATION_PKMN_FAN_CLUB]      = {MAP(MAP_VERMILION_CITY_POKEMON_FAN_CLUB),       MAP(MAP_VERMILION_CITY)},
-    [QL_LOCATION_VERMILION_GYM]      = {MAP(MAP_VERMILION_CITY_GYM),                    MAP(MAP_VERMILION_CITY)},
-    [QL_LOCATION_SS_ANNE]            = {MAP(MAP_SSANNE_1F_CORRIDOR),                    MAP(MAP_VERMILION_CITY)},
-    [QL_LOCATION_DIGLETTS_CAVE_1]    = {MAP(MAP_DIGLETTS_CAVE_NORTH_ENTRANCE),          MAP(MAP_ROUTE2)},
-    [QL_LOCATION_DIGLETTS_CAVE_2]    = {MAP(MAP_DIGLETTS_CAVE_SOUTH_ENTRANCE),          MAP(MAP_ROUTE11)},
-    [QL_LOCATION_ROCK_TUNNEL_1]      = {MAP(MAP_ROCK_TUNNEL_1F),                        MAP(MAP_ROUTE10)},
-    [QL_LOCATION_ROCK_TUNNEL_2]      = {MAP(MAP_ROCK_TUNNEL_1F),                        MAP(MAP_ROUTE10)},
-    [QL_LOCATION_POWER_PLANT]        = {MAP(MAP_POWER_PLANT),                           MAP(MAP_ROUTE10)},
-    [QL_LOCATION_PKMN_TOWER]         = {MAP(MAP_POKEMON_TOWER_1F),                      MAP(MAP_LAVENDER_TOWN)},
-    [QL_LOCATION_VOLUNTEER_HOUSE]    = {MAP(MAP_LAVENDER_TOWN_VOLUNTEER_POKEMON_HOUSE), MAP(MAP_LAVENDER_TOWN)},
-    [QL_LOCATION_NAME_RATERS_HOUSE]  = {MAP(MAP_LAVENDER_TOWN_HOUSE2),                  MAP(MAP_LAVENDER_TOWN)},
-    [QL_LOCATION_UNDERGROUND_PATH_3] = {MAP(MAP_UNDERGROUND_PATH_EAST_ENTRANCE),        MAP(MAP_ROUTE8)},
-    [QL_LOCATION_UNDERGROUND_PATH_4] = {MAP(MAP_UNDERGROUND_PATH_WEST_ENTRANCE),        MAP(MAP_ROUTE7)},
-    [QL_LOCATION_CELADON_DEPT_STORE] = {MAP(MAP_CELADON_CITY_DEPARTMENT_STORE_1F),      MAP(MAP_CELADON_CITY)},
-    [QL_LOCATION_CELADON_MANSION]    = {MAP(MAP_CELADON_CITY_CONDOMINIUMS_1F),          MAP(MAP_CELADON_CITY)},
-    [QL_LOCATION_GAME_CORNER]        = {MAP(MAP_CELADON_CITY_GAME_CORNER),              MAP(MAP_CELADON_CITY)},
-    [QL_LOCATION_CELADON_GYM]        = {MAP(MAP_CELADON_CITY_GYM),                      MAP(MAP_CELADON_CITY)},
-    [QL_LOCATION_CELADON_RESTAURANT] = {MAP(MAP_CELADON_CITY_RESTAURANT),               MAP(MAP_CELADON_CITY)},
-    [QL_LOCATION_ROCKET_HIDEOUT]     = {MAP(MAP_ROCKET_HIDEOUT_B1F),                    MAP(MAP_CELADON_CITY_GAME_CORNER)},
-    [QL_LOCATION_SAFARI_ZONE]        = {MAP(MAP_SAFARI_ZONE_CENTER),                    MAP(MAP_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE)},
-    [QL_LOCATION_FUCHSIA_GYM]        = {MAP(MAP_FUCHSIA_CITY_GYM),                      MAP(MAP_FUCHSIA_CITY)},
-    [QL_LOCATION_WARDENS_HOME]       = {MAP(MAP_FUCHSIA_CITY_WARDENS_HOUSE),            MAP(MAP_FUCHSIA_CITY)},
-    [QL_LOCATION_FIGHTING_DOJO]      = {MAP(MAP_SAFFRON_CITY_DOJO),                     MAP(MAP_SAFFRON_CITY)},
-    [QL_LOCATION_SAFFRON_GYM]        = {MAP(MAP_SAFFRON_CITY_GYM),                      MAP(MAP_SAFFRON_CITY)},
-    [QL_LOCATION_SILPH_CO]           = {MAP(MAP_SILPH_CO_1F),                           MAP(MAP_SAFFRON_CITY)},
-    [QL_LOCATION_SEAFOAM_ISLANDS_1]  = {MAP(MAP_SEAFOAM_ISLANDS_1F),                    MAP(MAP_ROUTE20)},
-    [QL_LOCATION_SEAFOAM_ISLANDS_2]  = {MAP(MAP_SEAFOAM_ISLANDS_1F),                    MAP(MAP_ROUTE20)},
-    [QL_LOCATION_PKMN_MANSION]       = {MAP(MAP_POKEMON_MANSION_1F),                    MAP(MAP_CINNABAR_ISLAND)},
-    [QL_LOCATION_CINNABAR_GYM]       = {MAP(MAP_CINNABAR_ISLAND_GYM),                   MAP(MAP_CINNABAR_ISLAND)},
-    [QL_LOCATION_CINNABAR_LAB]       = {MAP(MAP_CINNABAR_ISLAND_POKEMON_LAB_ENTRANCE),  MAP(MAP_CINNABAR_ISLAND)},
-    [QL_LOCATION_VICTORY_ROAD_1]     = {MAP(MAP_VICTORY_ROAD_1F),                       MAP(MAP_ROUTE23)},
-    [QL_LOCATION_VICTORY_ROAD_2]     = {MAP(MAP_VICTORY_ROAD_2F),                       MAP(MAP_ROUTE23)},
-    [QL_LOCATION_PKMN_LEAGUE]        = {MAP(MAP_INDIGO_PLATEAU_POKEMON_CENTER_1F),      MAP(MAP_INDIGO_PLATEAU_EXTERIOR)},
-    [QL_LOCATION_CERULEAN_CAVE]      = {MAP(MAP_CERULEAN_CAVE_1F),                      MAP(MAP_CERULEAN_CITY)}
-};
+    [QL_LOCATION_HOME] = {MAP(MAP_PALLET_TOWN_PLAYERS_HOUSE_1F), MAP(MAP_PALLET_TOWN)},
+    [QL_LOCATION_OAKS_LAB] = {MAP(MAP_PALLET_TOWN_PROFESSOR_OAKS_LAB), MAP(MAP_PALLET_TOWN)},
+    [QL_LOCATION_VIRIDIAN_GYM] = {MAP(MAP_VIRIDIAN_CITY_GYM), MAP(MAP_VIRIDIAN_CITY)},
+    [QL_LOCATION_LEAGUE_GATE_1] = {MAP(MAP_ROUTE22_NORTH_ENTRANCE), MAP(MAP_ROUTE22)},
+    [QL_LOCATION_LEAGUE_GATE_2] = {MAP(MAP_ROUTE22_NORTH_ENTRANCE), MAP(MAP_ROUTE23)},
+    [QL_LOCATION_VIRIDIAN_FOREST_1] = {MAP(MAP_VIRIDIAN_FOREST), MAP(MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE)},
+    [QL_LOCATION_VIRIDIAN_FOREST_2] = {MAP(MAP_VIRIDIAN_FOREST), MAP(MAP_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE)},
+    [QL_LOCATION_PEWTER_MUSEUM] = {MAP(MAP_PEWTER_CITY_MUSEUM_1F), MAP(MAP_PEWTER_CITY)},
+    [QL_LOCATION_PEWTER_GYM] = {MAP(MAP_PEWTER_CITY_GYM), MAP(MAP_PEWTER_CITY)},
+    [QL_LOCATION_MT_MOON_1] = {MAP(MAP_MT_MOON_1F), MAP(MAP_ROUTE4)},
+    [QL_LOCATION_MT_MOON_2] = {MAP(MAP_MT_MOON_B1F), MAP(MAP_ROUTE4)},
+    [QL_LOCATION_CERULEAN_GYM] = {MAP(MAP_CERULEAN_CITY_GYM), MAP(MAP_CERULEAN_CITY)},
+    [QL_LOCATION_BIKE_SHOP] = {MAP(MAP_CERULEAN_CITY_BIKE_SHOP), MAP(MAP_CERULEAN_CITY)},
+    [QL_LOCATION_BILLS_HOUSE] = {MAP(MAP_ROUTE25_SEA_COTTAGE), MAP(MAP_ROUTE25)},
+    [QL_LOCATION_DAY_CARE] = {MAP(MAP_ROUTE5_POKEMON_DAY_CARE), MAP(MAP_ROUTE5)},
+    [QL_LOCATION_UNDERGROUND_PATH_1] = {MAP(MAP_UNDERGROUND_PATH_NORTH_ENTRANCE), MAP(MAP_ROUTE5)},
+    [QL_LOCATION_UNDERGROUND_PATH_2] = {MAP(MAP_UNDERGROUND_PATH_SOUTH_ENTRANCE), MAP(MAP_ROUTE6)},
+    [QL_LOCATION_PKMN_FAN_CLUB] = {MAP(MAP_VERMILION_CITY_POKEMON_FAN_CLUB), MAP(MAP_VERMILION_CITY)},
+    [QL_LOCATION_VERMILION_GYM] = {MAP(MAP_VERMILION_CITY_GYM), MAP(MAP_VERMILION_CITY)},
+    [QL_LOCATION_SS_ANNE] = {MAP(MAP_SSANNE_1F_CORRIDOR), MAP(MAP_VERMILION_CITY)},
+    [QL_LOCATION_DIGLETTS_CAVE_1] = {MAP(MAP_DIGLETTS_CAVE_NORTH_ENTRANCE), MAP(MAP_ROUTE2)},
+    [QL_LOCATION_DIGLETTS_CAVE_2] = {MAP(MAP_DIGLETTS_CAVE_SOUTH_ENTRANCE), MAP(MAP_ROUTE11)},
+    [QL_LOCATION_ROCK_TUNNEL_1] = {MAP(MAP_ROCK_TUNNEL_1F), MAP(MAP_ROUTE10)},
+    [QL_LOCATION_ROCK_TUNNEL_2] = {MAP(MAP_ROCK_TUNNEL_1F), MAP(MAP_ROUTE10)},
+    [QL_LOCATION_POWER_PLANT] = {MAP(MAP_POWER_PLANT), MAP(MAP_ROUTE10)},
+    [QL_LOCATION_PKMN_TOWER] = {MAP(MAP_POKEMON_TOWER_1F), MAP(MAP_LAVENDER_TOWN)},
+    [QL_LOCATION_VOLUNTEER_HOUSE] = {MAP(MAP_LAVENDER_TOWN_VOLUNTEER_POKEMON_HOUSE), MAP(MAP_LAVENDER_TOWN)},
+    [QL_LOCATION_NAME_RATERS_HOUSE] = {MAP(MAP_LAVENDER_TOWN_HOUSE2), MAP(MAP_LAVENDER_TOWN)},
+    [QL_LOCATION_UNDERGROUND_PATH_3] = {MAP(MAP_UNDERGROUND_PATH_EAST_ENTRANCE), MAP(MAP_ROUTE8)},
+    [QL_LOCATION_UNDERGROUND_PATH_4] = {MAP(MAP_UNDERGROUND_PATH_WEST_ENTRANCE), MAP(MAP_ROUTE7)},
+    [QL_LOCATION_CELADON_DEPT_STORE] = {MAP(MAP_CELADON_CITY_DEPARTMENT_STORE_1F), MAP(MAP_CELADON_CITY)},
+    [QL_LOCATION_CELADON_MANSION] = {MAP(MAP_CELADON_CITY_CONDOMINIUMS_1F), MAP(MAP_CELADON_CITY)},
+    [QL_LOCATION_GAME_CORNER] = {MAP(MAP_CELADON_CITY_GAME_CORNER), MAP(MAP_CELADON_CITY)},
+    [QL_LOCATION_CELADON_GYM] = {MAP(MAP_CELADON_CITY_GYM), MAP(MAP_CELADON_CITY)},
+    [QL_LOCATION_CELADON_RESTAURANT] = {MAP(MAP_CELADON_CITY_RESTAURANT), MAP(MAP_CELADON_CITY)},
+    [QL_LOCATION_ROCKET_HIDEOUT] = {MAP(MAP_ROCKET_HIDEOUT_B1F), MAP(MAP_CELADON_CITY_GAME_CORNER)},
+    [QL_LOCATION_SAFARI_ZONE] = {MAP(MAP_SAFARI_ZONE_CENTER), MAP(MAP_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE)},
+    [QL_LOCATION_FUCHSIA_GYM] = {MAP(MAP_FUCHSIA_CITY_GYM), MAP(MAP_FUCHSIA_CITY)},
+    [QL_LOCATION_WARDENS_HOME] = {MAP(MAP_FUCHSIA_CITY_WARDENS_HOUSE), MAP(MAP_FUCHSIA_CITY)},
+    [QL_LOCATION_FIGHTING_DOJO] = {MAP(MAP_SAFFRON_CITY_DOJO), MAP(MAP_SAFFRON_CITY)},
+    [QL_LOCATION_SAFFRON_GYM] = {MAP(MAP_SAFFRON_CITY_GYM), MAP(MAP_SAFFRON_CITY)},
+    [QL_LOCATION_SILPH_CO] = {MAP(MAP_SILPH_CO_1F), MAP(MAP_SAFFRON_CITY)},
+    [QL_LOCATION_SEAFOAM_ISLANDS_1] = {MAP(MAP_SEAFOAM_ISLANDS_1F), MAP(MAP_ROUTE20)},
+    [QL_LOCATION_SEAFOAM_ISLANDS_2] = {MAP(MAP_SEAFOAM_ISLANDS_1F), MAP(MAP_ROUTE20)},
+    [QL_LOCATION_PKMN_MANSION] = {MAP(MAP_POKEMON_MANSION_1F), MAP(MAP_CINNABAR_ISLAND)},
+    [QL_LOCATION_CINNABAR_GYM] = {MAP(MAP_CINNABAR_ISLAND_GYM), MAP(MAP_CINNABAR_ISLAND)},
+    [QL_LOCATION_CINNABAR_LAB] = {MAP(MAP_CINNABAR_ISLAND_POKEMON_LAB_ENTRANCE), MAP(MAP_CINNABAR_ISLAND)},
+    [QL_LOCATION_VICTORY_ROAD_1] = {MAP(MAP_VICTORY_ROAD_1F), MAP(MAP_ROUTE23)},
+    [QL_LOCATION_VICTORY_ROAD_2] = {MAP(MAP_VICTORY_ROAD_2F), MAP(MAP_ROUTE23)},
+    [QL_LOCATION_PKMN_LEAGUE] = {MAP(MAP_INDIGO_PLATEAU_POKEMON_CENTER_1F), MAP(MAP_INDIGO_PLATEAU_EXTERIOR)},
+    [QL_LOCATION_CERULEAN_CAVE] = {MAP(MAP_CERULEAN_CAVE_1F), MAP(MAP_CERULEAN_CITY)}};
 
 void QuestLog_CheckDepartingIndoorsMap(void)
 {
@@ -1894,9 +1865,7 @@ void QuestLog_TryRecordDepartedLocation(void)
     {
         if (locationId == QL_LOCATION_VIRIDIAN_FOREST_1)
         {
-            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE)
-              && (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE)
-               || gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE)))
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE) && (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE) || gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE)))
             {
                 data.mapSec = MAPSEC_ROUTE_2;
                 if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE))
@@ -1911,8 +1880,7 @@ void QuestLog_TryRecordDepartedLocation(void)
         else if (locationId == QL_LOCATION_LEAGUE_GATE_1)
         {
             if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE22) &&
-                (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE22)
-              || gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE23)))
+                (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE22) || gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE23)))
             {
                 data.mapSec = Overworld_GetMapHeaderByGroupAndId(sInsideOutsidePairs[locationId].inside_grp, sInsideOutsidePairs[locationId].inside_num)->regionMapSectionId;
                 if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE22))
@@ -1924,8 +1892,7 @@ void QuestLog_TryRecordDepartedLocation(void)
                 return;
             }
         }
-        if (gSaveBlock1Ptr->location.mapGroup == sInsideOutsidePairs[locationId].outside_grp
-           && gSaveBlock1Ptr->location.mapNum == sInsideOutsidePairs[locationId].outside_num)
+        if (gSaveBlock1Ptr->location.mapGroup == sInsideOutsidePairs[locationId].outside_grp && gSaveBlock1Ptr->location.mapNum == sInsideOutsidePairs[locationId].outside_num)
         {
             data.mapSec = Overworld_GetMapHeaderByGroupAndId(sInsideOutsidePairs[locationId].inside_grp, sInsideOutsidePairs[locationId].inside_num)->regionMapSectionId;
             data.locationId = locationId;
@@ -2038,8 +2005,7 @@ const u16 sPokeCenter1FMaps[] = {
     MAP_SEVEN_ISLAND_POKEMON_CENTER_1F,
     MAP_SIX_ISLAND_POKEMON_CENTER_1F,
     MAP_UNION_ROOM,
-    MAP_UNDEFINED
-};
+    MAP_UNDEFINED};
 
 bool8 UsedPokemonCenterWarp(void)
 {
@@ -2090,8 +2056,7 @@ static const u16 sEliteFourLightingPalettes[][16] = {
     INCBIN_U16("graphics/field_specials/elite_four_lighting_8.gbapal"),
     INCBIN_U16("graphics/field_specials/elite_four_lighting_9.gbapal"),
     INCBIN_U16("graphics/field_specials/elite_four_lighting_10.gbapal"),
-    INCBIN_U16("graphics/field_specials/elite_four_lighting_11.gbapal")
-};
+    INCBIN_U16("graphics/field_specials/elite_four_lighting_11.gbapal")};
 
 static const u16 sChampionRoomLightingPalettes[][16] = {
     INCBIN_U16("graphics/field_specials/champion_room_lighting_0.gbapal"),
@@ -2102,8 +2067,7 @@ static const u16 sChampionRoomLightingPalettes[][16] = {
     INCBIN_U16("graphics/field_specials/champion_room_lighting_5.gbapal"),
     INCBIN_U16("graphics/field_specials/champion_room_lighting_6.gbapal"),
     INCBIN_U16("graphics/field_specials/champion_room_lighting_7.gbapal"),
-    INCBIN_U16("graphics/field_specials/champion_room_lighting_8.gbapal")
-};
+    INCBIN_U16("graphics/field_specials/champion_room_lighting_8.gbapal")};
 
 static const u8 sEliteFourLightingTimers[] = {
     40,
@@ -2116,19 +2080,17 @@ static const u8 sEliteFourLightingTimers[] = {
     12,
     12,
     12,
-    12
-};
+    12};
 
 static const u8 sChampionRoomLightingTimers[] = {
     20,
-     8,
-     8,
-     8,
-     8,
-     8,
-     8,
-     8
-};
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8};
 
 void DoPokemonLeagueLightingEffect(void)
 {
@@ -2160,12 +2122,7 @@ void DoPokemonLeagueLightingEffect(void)
 static void Task_RunPokemonLeagueLightingEffect(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
-    if (!gPaletteFade.active
-     && FlagGet(FLAG_TEMP_2) != FALSE
-     && FlagGet(FLAG_TEMP_5) != TRUE
-     && gGlobalFieldTintMode != QL_TINT_BACKUP_GRAYSCALE
-     && --data[0] == 0
-    )
+    if (!gPaletteFade.active && FlagGet(FLAG_TEMP_2) != FALSE && FlagGet(FLAG_TEMP_5) != TRUE && gGlobalFieldTintMode != QL_TINT_BACKUP_GRAYSCALE && --data[0] == 0)
     {
         if (++data[1] == data[2])
             data[1] = 0;
@@ -2213,8 +2170,7 @@ void StopPokemonLeagueLightingEffectTask(void)
 static const u8 sCapeBrinkCompatibleSpecies[] = {
     SPECIES_VENUSAUR,
     SPECIES_CHARIZARD,
-    SPECIES_BLASTOISE
-};
+    SPECIES_BLASTOISE};
 
 bool8 CapeBrinkGetMoveToTeachLeadPokemon(void)
 {
@@ -2295,13 +2251,7 @@ bool8 HasLearnedAllMovesFromCapeBrinkTutor(void)
 
 bool8 CutMoveRuinValleyCheck(void)
 {
-    if (FlagGet(FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE) != TRUE
-     && gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_SIX_ISLAND_RUIN_VALLEY)
-     && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_SIX_ISLAND_RUIN_VALLEY)
-     && gSaveBlock1Ptr->pos.x == 24
-     && gSaveBlock1Ptr->pos.y == 25
-     && GetPlayerFacingDirection() == DIR_NORTH
-    )
+    if (FlagGet(FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE) != TRUE && gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_SIX_ISLAND_RUIN_VALLEY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_SIX_ISLAND_RUIN_VALLEY) && gSaveBlock1Ptr->pos.x == 24 && gSaveBlock1Ptr->pos.y == 25 && GetPlayerFacingDirection() == DIR_NORTH)
         return TRUE;
     else
         return FALSE;
@@ -2327,13 +2277,12 @@ static const u16 sDeoxysObjectPals[][16] = {
     INCBIN_U16("graphics/field_specials/deoxys_rock_7.gbapal"),
     INCBIN_U16("graphics/field_specials/deoxys_rock_8.gbapal"),
     INCBIN_U16("graphics/field_specials/deoxys_rock_9.gbapal"),
-    INCBIN_U16("graphics/field_specials/deoxys_rock_10.gbapal")
-};
+    INCBIN_U16("graphics/field_specials/deoxys_rock_10.gbapal")};
 
 static const u8 sDeoxysCoords[][2] = {
     {15, 12},
     {11, 14},
-    {15,  8},
+    {15, 8},
     {19, 14},
     {12, 11},
     {18, 11},
@@ -2341,8 +2290,7 @@ static const u8 sDeoxysCoords[][2] = {
     {11, 14},
     {19, 14},
     {15, 15},
-    {15, 10}
-};
+    {15, 10}};
 
 static const u8 sDeoxysStepCaps[] = {
     4,
@@ -2354,8 +2302,7 @@ static const u8 sDeoxysStepCaps[] = {
     4,
     6,
     3,
-    3
-};
+    3};
 
 void DoDeoxysTriangleInteraction(void)
 {
@@ -2414,7 +2361,7 @@ static void MoveDeoxysObject(u8 num)
         PlaySE(SE_DEOXYS_MOVE);
     CreateTask(Task_WaitDeoxysFieldEffect, 8);
     gFieldEffectArguments[0] = LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK;
-    gFieldEffectArguments[1] =  MAP_NUM(MAP_BIRTH_ISLAND_EXTERIOR);
+    gFieldEffectArguments[1] = MAP_NUM(MAP_BIRTH_ISLAND_EXTERIOR);
     gFieldEffectArguments[2] = MAP_GROUP(MAP_BIRTH_ISLAND_EXTERIOR);
     gFieldEffectArguments[3] = sDeoxysCoords[num][0];
     gFieldEffectArguments[4] = sDeoxysCoords[num][1];
@@ -2498,8 +2445,7 @@ bool8 PlayerPartyContainsSpeciesWithPlayerID(void)
     u8 i;
     for (i = 0; i < playerCount; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG, NULL) == gSpecialVar_0x8004 
-            && GetPlayerTrainerId() == GetMonData(&gPlayerParty[i], MON_DATA_OT_ID, NULL))
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG, NULL) == gSpecialVar_0x8004 && GetPlayerTrainerId() == GetMonData(&gPlayerParty[i], MON_DATA_OT_ID, NULL))
             return TRUE;
     }
     return FALSE;

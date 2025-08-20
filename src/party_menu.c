@@ -69,6 +69,8 @@
 #include "constants/quest_log.h"
 #include "constants/songs.h"
 #include "constants/sound.h"
+#include "script_pokemon_util.h"
+#include "event_scripts.h"
 
 #define PARTY_PAL_SELECTED (1 << 0)
 #define PARTY_PAL_FAINTED (1 << 1)
@@ -375,6 +377,7 @@ static void SlideMultiPartyMenuBoxSpritesOneStep(u8 taskId);
 static void Task_MultiPartnerPartySlideIn(u8 taskId);
 static bool8 CB2_FadeFromPartyMenu(void);
 static void Task_PartyMenuWaitForFade(u8 taskId);
+static void FieldCallback_RunHealScript(void);
 static void Task_FirstBattleEnterParty_DarkenScreen(u8 taskId);
 static void Task_FirstBattleEnterParty_WaitDarken(u8 taskId);
 static void Task_FirstBattleEnterParty_CreatePrinter(u8 taskId);
@@ -6437,4 +6440,17 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
         UnlockPlayerFieldControls();
         ScriptContext_Enable();
     }
+}
+
+static void FieldCallback_RunHealScript(void)
+{
+    ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
+    ScriptContext_Enable();
+}
+
+void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
+{
+    sPartyMenuInternal->exitCallback = CB2_ReturnToField;
+    gPostMenuFieldCallback = FieldCallback_RunHealScript;
+    Task_ClosePartyMenu(taskId);
 }

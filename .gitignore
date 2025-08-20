@@ -35,6 +35,7 @@
 *.swo
 *.swp
 *.til
+*.ini
 .fuse*
 .idea/
 Thumbs.db

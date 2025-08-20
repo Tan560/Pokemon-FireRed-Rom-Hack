@@ -1063,6 +1063,7 @@ EventScript_ResetAllMapFlags::
 	setvar VAR_MASSAGE_COOLDOWN_STEP_COUNTER, 500
 	end
 
+	.include "data/scripts/portable_pc.inc"
 	.include "data/scripts/hall_of_fame.inc"
 	.include "data/scripts/pkmn_center_nurse.inc"
 	.include "data/scripts/obtain_item.inc"

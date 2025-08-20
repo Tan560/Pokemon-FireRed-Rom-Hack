@@ -22,6 +22,7 @@ static const u32 *const sItemIconTable[ITEMS_COUNT + 1][2] =
         [ITEM_AWAKENING] = {gItemIcon_StatusHeal, gItemIconPalette_Awakening},
         [ITEM_PARALYZE_HEAL] = {gItemIcon_StatusHeal, gItemIconPalette_ParalyzeHeal},
         [ITEM_FULL_RESTORE] = {gItemIcon_LargePotion, gItemIconPalette_FullRestore},
+        [ITEM_PORTABLE_PC] = {gItemIcon_LargePotion, gItemIconPalette_FullRestore},
         [ITEM_MAX_POTION] = {gItemIcon_LargePotion, gItemIconPalette_MaxPotion},
         [ITEM_HYPER_POTION] = {gItemIcon_Potion, gItemIconPalette_HyperPotion},
         [ITEM_SUPER_POTION] = {gItemIcon_Potion, gItemIconPalette_SuperPotion},
