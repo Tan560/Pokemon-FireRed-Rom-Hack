@@ -5412,6 +5412,36 @@ void ItemUseCB_EvolutionStone(u8 taskId, TaskFunc func)
         Task_DoUseItemAnim(taskId);
 }
 
+void ItemUseCB_PermanentRepel(u8 taskId, TaskFunc func)
+{
+    if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
+        sPermanentRepelActive = TRUE;
+    else
+        sPermanentRepelActive = FALSE;
+
+    gItemUseCB = ItemUseCB_PermanentRepelStep;
+    Task_DoUseItemAnim(taskId);
+}
+
+void ItemUseCB_PermanentRepelStep(u8 taskId, TaskFunc func)
+{
+    if (sPermanentRepelActive == TRUE)
+    {
+        sPermanentRepelActive = FALSE;
+        FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        DisplayPartyMenuMessage(gText_EternalRepelOff, TRUE);
+    }
+    else
+    {
+        sPermanentRepelActive = TRUE;
+        FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        DisplayPartyMenuMessage(gText_EternalRepelOn, TRUE);
+    }
+
+    ScheduleBgCopyTilemapToVram(2);
+    gTasks[taskId].func = func;
+}
+
 static void CB2_UseEvolutionStone(void)
 {
     gCB2_AfterEvolution = gPartyMenu.exitCallback;
