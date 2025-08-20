@@ -6441,16 +6441,3 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
         ScriptContext_Enable();
     }
 }
-
-static void FieldCallback_RunHealScript(void)
-{
-    ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
-    ScriptContext_Enable();
-}
-
-void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
-{
-    sPartyMenuInternal->exitCallback = CB2_ReturnToField;
-    gPostMenuFieldCallback = FieldCallback_RunHealScript;
-    Task_ClosePartyMenu(taskId);
-}

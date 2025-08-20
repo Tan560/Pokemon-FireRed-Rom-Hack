@@ -97,6 +97,7 @@ static const u32 *const sItemIconTable[ITEMS_COUNT + 1][2] =
         // Field items
         [ITEM_SUPER_REPEL] = {gItemIcon_Repel, gItemIconPalette_SuperRepel},
         [ITEM_MAX_REPEL] = {gItemIcon_Repel, gItemIconPalette_MaxRepel},
+        [ITEM_PERMANENT_REPEL] = {gItemIcon_Repel, gItemIconPalette_MaxRepel},
         [ITEM_ESCAPE_ROPE] = {gItemIcon_EscapeRope, gItemIconPalette_EscapeRope},
         [ITEM_REPEL] = {gItemIcon_Repel, gItemIconPalette_Repel},
         // ????????

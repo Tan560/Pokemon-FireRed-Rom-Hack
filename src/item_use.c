@@ -39,7 +39,8 @@
 #include "constants/songs.h"
 #include "constants/field_weather.h"
 #include "event_scripts.h"
-
+#include "constants/flags.h"
+#include "wild_encounter.h"
 static EWRAM_DATA void (*sItemUseOnFieldCB)(u8 taskId) = NULL;
 
 static void FieldCB_FadeInFromBlack(void);
@@ -436,6 +437,23 @@ void FieldUseFunc_PortablePC(u8 taskId)
 {
     ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
     DoSetUpItemUseCallback(taskId);
+}
+
+void FieldUseFunc_PermanentRepel(u8 taskId)
+{
+    PlaySE(SE_REPEL);
+    if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
+    {
+        FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ReturnToBagFromContextMenu);
+        DisableWildEncounters(FALSE); // Apply immediate effect
+    }
+    else
+    {
+        FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ReturnToBagFromContextMenu);
+        DisableWildEncounters(TRUE); // Apply immediate effect
+    }
 }
 
 void FieldUseFunc_EvoItem(u8 taskId)

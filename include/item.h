@@ -16,11 +16,11 @@ struct Item
     u8 importance;
     u8 registrability;
     u8 pocket;
-    u8 type; // unused for balls
+    u8 type;
     ItemUseFunc fieldUseFunc;
     u8 battleUsage;
     ItemUseFunc battleUseFunc;
-    u8 secondaryId; // only used for fishing rods
+    u8 secondaryId;
 };
 
 struct BagPocket
@@ -30,11 +30,12 @@ struct BagPocket
 };
 
 // Item type IDs (used to determine the exit callback)
-enum {
+enum
+{
     ITEM_TYPE_MAIL,
     ITEM_TYPE_PARTY_MENU,
     ITEM_TYPE_FIELD,
-    ITEM_TYPE_UNUSED, // Used for Pokeblock case in RSE
+    ITEM_TYPE_UNUSED,   // Used for Pokeblock case in RSE
     ITEM_TYPE_BAG_MENU, // No exit callback, stays in bag menu
 };
 
@@ -75,18 +76,18 @@ void ClearPCItemSlots(void);
 void TrySetObtainedItemQuestLogEvent(u16 itemId);
 bool8 AddBagItem(u16 itemId, u16 amount);
 
-void SortPocketAndPlaceHMsFirst(struct BagPocket * pocket);
+void SortPocketAndPlaceHMsFirst(struct BagPocket *pocket);
 u16 BagGetItemIdByPocketPosition(u8 pocketId, u16 itemId);
 u16 BagGetQuantityByPocketPosition(u8 pocketId, u16 itemId);
 u16 BagGetQuantityByItemId(u16 item);
 u8 ItemId_GetImportance(u16 itemId);
-void BagPocketCompaction(struct ItemSlot * slots, u8 capacity);
+void BagPocketCompaction(struct ItemSlot *slots, u8 capacity);
 u16 GetPcItemQuantity(u16 *);
 void SetBagPocketsPointers(void);
 
 void ItemPcCompaction(void);
 void RemovePCItem(u16 itemId, u16 quantity);
-void SortAndCompactBagPocket(struct BagPocket * pocket);
+void SortAndCompactBagPocket(struct BagPocket *pocket);
 u8 CountItemsInPC(void);
 void ApplyNewEncryptionKeyToBagItems_(u32 newKey);
 bool8 HasAtLeastOneBerry(void);
