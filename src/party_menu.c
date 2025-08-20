@@ -6441,10 +6441,15 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
     }
 }
 
-void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
+static void Task_HealPartyAndDisplayMessage(u8 taskId)
 {
     HealPlayerParty();
     PlayFanfare(MUS_HEAL);
     DisplayPartyMenuMessage(gText_PartyHealed, FALSE);
-    gTasks[taskId].func = func;
+    gTasks[taskId].func = Task_ClosePartyMenuAfterText;
+}
+
+void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
+{
+    gTasks[taskId].func = Task_HealPartyAndDisplayMessage;
 }
