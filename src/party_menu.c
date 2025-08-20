@@ -377,7 +377,7 @@ static void SlideMultiPartyMenuBoxSpritesOneStep(u8 taskId);
 static void Task_MultiPartnerPartySlideIn(u8 taskId);
 static bool8 CB2_FadeFromPartyMenu(void);
 static void Task_PartyMenuWaitForFade(u8 taskId);
-static void Cb2_RunHealScript(void);
+static void FieldCallback_RunHealScript(void);
 static void Task_FirstBattleEnterParty_DarkenScreen(u8 taskId);
 static void Task_FirstBattleEnterParty_WaitDarken(u8 taskId);
 static void Task_FirstBattleEnterParty_CreatePrinter(u8 taskId);
@@ -6442,14 +6442,15 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
     }
 }
 
-static void Cb2_RunHealScript(void)
+static void FieldCallback_RunHealScript(void)
 {
     ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
-    SetMainCallback2(CB2_ReturnToBagMenu);
+    ScriptContext_Enable();
 }
 
 void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
 {
-    sPartyMenuInternal->exitCallback = Cb2_RunHealScript;
+    sPartyMenuInternal->exitCallback = CB2_ReturnToField;
+    gPostMenuFieldCallback = FieldCallback_RunHealScript;
     Task_ClosePartyMenu(taskId);
 }
