@@ -6443,6 +6443,8 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
 
 void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
 {
-    ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
-    Task_ClosePartyMenu(taskId);
+    HealPlayerParty();
+    PlayFanfare(MUS_HEAL);
+    DisplayPartyMenuMessage(gText_PartyHealed, FALSE);
+    gTasks[taskId].func = func;
 }
