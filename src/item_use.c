@@ -445,60 +445,14 @@ void FieldUseFunc_PermanentRepel(u8 taskId)
     if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
     {
         FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        if (gTasks[taskId].data[3] == 0)
-            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ReturnToBagFromContextMenu);
-        else
-            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ItemUse_CloseMessageBoxAndReturnToField);
+        DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ReturnToBagFromContextMenu);
+        DisableWildEncounters(FALSE); // Apply immediate effect
     }
     else
     {
         FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        if (gTasks[taskId].data[3] == 0)
-            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ReturnToBagFromContextMenu);
-        else
-            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ItemUse_CloseMessageBoxAndReturnToField);
-    }
-}
-
-void FieldUseFunc_PermanentRepel(u8 taskId)
-{
-    PlaySE(SE_REPEL);
-    if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
-    {
-        FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        if (gTasks[taskId].data[3] == 0)
-            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ReturnToBagFromContextMenu);
-        else
-            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ItemUse_CloseMessageBoxAndReturnToField);
-    }
-    else
-    {
-        FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        if (gTasks[taskId].data[3] == 0)
-            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ReturnToBagFromContextMenu);
-        else
-            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ItemUse_CloseMessageBoxAndReturnToField);
-    }
-}
-
-void FieldUseFunc_PermanentRepel(u8 taskId)
-{
-    PlaySE(SE_REPEL);
-    if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
-    {
-        FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        if (gTasks[taskId].data[3] == 0)
-            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ReturnToBagFromContextMenu);
-        else
-            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ItemUse_CloseMessageBoxAndReturnToField);
-    }
-    else
-    {
-        FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        if (gTasks[taskId].data[3] == 0)
-            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ReturnToBagFromContextMenu);
-        else
-            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ItemUse_CloseMessageBoxAndReturnToField);
+        DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ReturnToBagFromContextMenu);
+        DisableWildEncounters(TRUE); // Apply immediate effect
     }
 }
 
