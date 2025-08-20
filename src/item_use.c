@@ -441,26 +441,65 @@ void FieldUseFunc_PortablePC(u8 taskId)
 
 void FieldUseFunc_PermanentRepel(u8 taskId)
 {
+    PlaySE(SE_REPEL);
     if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
     {
-        // Turn OFF
         FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        DisableWildEncounters(FALSE); // Apply immediate effect
-        StringExpandPlaceholders(gStringVar4, gText_EternalRepelOff);
-        PlaySE(SE_REPEL);
+        if (gTasks[taskId].data[3] == 0)
+            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ReturnToBagFromContextMenu);
+        else
+            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ItemUse_CloseMessageBoxAndReturnToField);
     }
     else
     {
-        // Turn ON
         FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        DisableWildEncounters(TRUE); // Apply immediate effect
-        StringExpandPlaceholders(gStringVar4, gText_EternalRepelOn);
-        PlaySE(SE_REPEL);
+        if (gTasks[taskId].data[3] == 0)
+            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ReturnToBagFromContextMenu);
+        else
+            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ItemUse_CloseMessageBoxAndReturnToField);
     }
+}
 
-    // Display the message ("...turned on." or "...turned off.")
-    DisplayPartyMenuMessage(gStringVar4, FALSE);
-    DoSetUpItemUseCallback(taskId);
+void FieldUseFunc_PermanentRepel(u8 taskId)
+{
+    PlaySE(SE_REPEL);
+    if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
+    {
+        FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        if (gTasks[taskId].data[3] == 0)
+            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ReturnToBagFromContextMenu);
+        else
+            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ItemUse_CloseMessageBoxAndReturnToField);
+    }
+    else
+    {
+        FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        if (gTasks[taskId].data[3] == 0)
+            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ReturnToBagFromContextMenu);
+        else
+            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ItemUse_CloseMessageBoxAndReturnToField);
+    }
+}
+
+void FieldUseFunc_PermanentRepel(u8 taskId)
+{
+    PlaySE(SE_REPEL);
+    if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
+    {
+        FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        if (gTasks[taskId].data[3] == 0)
+            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ReturnToBagFromContextMenu);
+        else
+            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOff, Task_ItemUse_CloseMessageBoxAndReturnToField);
+    }
+    else
+    {
+        FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
+        if (gTasks[taskId].data[3] == 0)
+            DisplayItemMessageInBag(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ReturnToBagFromContextMenu);
+        else
+            DisplayItemMessageOnField(taskId, FONT_NORMAL, gText_EternalRepelOn, Task_ItemUse_CloseMessageBoxAndReturnToField);
+    }
 }
 
 void FieldUseFunc_EvoItem(u8 taskId)

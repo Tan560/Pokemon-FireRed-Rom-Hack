@@ -5412,24 +5412,6 @@ void ItemUseCB_EvolutionStone(u8 taskId, TaskFunc func)
         Task_DoUseItemAnim(taskId);
 }
 
-void ItemUseCB_PermanentRepel(u8 taskId, TaskFunc func)
-{
-    gPartyMenuUseExitCallback = TRUE;
-
-    if (FlagGet(FLAG_SYS_PERMANENT_REPEL_ACTIVE))
-    {
-        FlagClear(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        DisplayPartyMenuMessage(gText_EternalRepelOff, TRUE);
-    }
-    else
-    {
-        FlagSet(FLAG_SYS_PERMANENT_REPEL_ACTIVE);
-        DisplayPartyMenuMessage(gText_EternalRepelOn, TRUE);
-    }
-
-    gTasks[taskId].func = Task_ClosePartyMenuAfterText;
-}
-
 static void CB2_UseEvolutionStone(void)
 {
     gCB2_AfterEvolution = gPartyMenu.exitCallback;
