@@ -377,6 +377,8 @@ static void SlideMultiPartyMenuBoxSpritesOneStep(u8 taskId);
 static void Task_MultiPartnerPartySlideIn(u8 taskId);
 static bool8 CB2_FadeFromPartyMenu(void);
 static void Task_PartyMenuWaitForFade(u8 taskId);
+static void Task_HealPartyPlaySound(u8 taskId);
+static void Task_WaitForSoundAndShowMessage(u8 taskId);
 static void Task_FirstBattleEnterParty_DarkenScreen(u8 taskId);
 static void Task_FirstBattleEnterParty_WaitDarken(u8 taskId);
 static void Task_FirstBattleEnterParty_CreatePrinter(u8 taskId);
@@ -6441,15 +6443,24 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
     }
 }
 
-static void Task_HealPartyAndDisplayMessage(u8 taskId)
+void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
+{
+    gTasks[taskId].func = Task_HealPartyPlaySound;
+}
+
+static void Task_HealPartyPlaySound(u8 taskId)
 {
     HealPlayerParty();
     PlayFanfare(MUS_HEAL);
-    DisplayPartyMenuMessage(gText_PartyHealed, FALSE);
-    gTasks[taskId].func = Task_ClosePartyMenuAfterText;
+    gTasks[taskId].func = Task_WaitForSoundAndShowMessage;
 }
 
-void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
+static void Task_WaitForSoundAndShowMessage(u8 taskId)
 {
-    gTasks[taskId].func = Task_HealPartyAndDisplayMessage;
+    if (IsFanfareTaskInactive())
+    {
+        DisplayPartyMenuMessage(gText_PartyHealed, FALSE);
+        ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, NULL, gSpecialVar_ItemId, 0xFFFF);
+        gTasks[taskId].func = Task_ClosePartyMenuAfterText;
+    }
 }
