@@ -38,6 +38,7 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/field_weather.h"
+#include "event_scripts.h"
 
 static EWRAM_DATA void (*sItemUseOnFieldCB)(u8 taskId) = NULL;
 
@@ -433,7 +434,7 @@ void FieldUseFunc_CapCandy(u8 taskId)
 
 void FieldUseFunc_PortablePC(u8 taskId)
 {
-    gItemUseCB = ItemUseCB_PortablePC;
+    ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
     DoSetUpItemUseCallback(taskId);
 }
 
