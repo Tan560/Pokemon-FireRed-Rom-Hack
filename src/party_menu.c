@@ -72,6 +72,7 @@
 #include "script_pokemon_util.h"
 #include "event_scripts.h"
 #include "wild_encounter.h"
+#include "string.h"
 
 #define PARTY_PAL_SELECTED (1 << 0)
 #define PARTY_PAL_FAINTED (1 << 1)
@@ -6475,6 +6476,5 @@ void ItemUseCB_PermanentRepel(u8 taskId, TaskFunc func)
         StringExpandPlaceholders(gStringVar4, gText_EternalRepelOn);
         PlaySE(SE_REPEL);
     }
-
-    DisplayItemMessageOnField(taskId, FONT_NORMAL, gStringVar4, CloseItemMessage);
+    DisplayPartyMenuMessage(gStringVar4, FALSE);
 }
