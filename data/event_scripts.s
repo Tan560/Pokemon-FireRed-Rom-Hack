@@ -1067,6 +1067,7 @@ EventScript_ResetAllMapFlags::
 	.include "data/scripts/pkmn_center_nurse.inc"
 	.include "data/scripts/obtain_item.inc"
 	.include "data/scripts/pc.inc"
+	.include "data/scripts/portable_pc.inc"
 
 Common_ShowEasyChatScreen::
 	fadescreen FADE_TO_BLACK
