@@ -71,6 +71,7 @@
 #include "constants/sound.h"
 #include "script_pokemon_util.h"
 #include "event_scripts.h"
+#include "wild_encounter.h"
 
 #define PARTY_PAL_SELECTED (1 << 0)
 #define PARTY_PAL_FAINTED (1 << 1)
@@ -421,6 +422,7 @@ EWRAM_DATA u8 gSelectedOrderFromParty[3] = {0};
 static EWRAM_DATA u16 sPartyMenuItemId = ITEM_NONE;
 ALIGNED(4)
 EWRAM_DATA u8 gBattlePartyCurrentOrder[PARTY_SIZE / 2] = {0}; // bits 0-3 are the current pos of Slot 1, 4-7 are Slot 2, and so on
+static bool8 sPermanentRepelActive = FALSE;                   // Track state
 
 COMMON_DATA void (*gItemUseCB)(u8, TaskFunc) = NULL;
 
@@ -6453,4 +6455,26 @@ void ItemUseCB_PortablePC(u8 taskId, TaskFunc func)
     sPartyMenuInternal->exitCallback = CB2_ReturnToField;
     gPostMenuFieldCallback = FieldCallback_RunHealScript;
     Task_ClosePartyMenu(taskId);
+}
+
+void ItemUseCB_PermanentRepel(u8 taskId, TaskFunc func)
+{
+    if (sPermanentRepelActive)
+    {
+        // Turn OFF
+        sPermanentRepelActive = FALSE;
+        DisableWildEncounters(FALSE); // Enable encounters
+        StringExpandPlaceholders(gStringVar4, gText_EternalRepelOff);
+        PlaySE(SE_REPEL);
+    }
+    else
+    {
+        // Turn ON
+        sPermanentRepelActive = TRUE;
+        DisableWildEncounters(TRUE); // Disable encounters
+        StringExpandPlaceholders(gStringVar4, gText_EternalRepelOn);
+        PlaySE(SE_REPEL);
+    }
+
+    DisplayItemMessageOnField(taskId, FONT_NORMAL, gStringVar4, CloseItemMessage);
 }

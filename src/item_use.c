@@ -438,6 +438,12 @@ void FieldUseFunc_PortablePC(u8 taskId)
     DoSetUpItemUseCallback(taskId);
 }
 
+void FieldUseFunc_PermanentRepel(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_PermanentRepel;
+    DoSetUpItemUseCallback(taskId);
+}
+
 void FieldUseFunc_EvoItem(u8 taskId)
 {
     gItemUseCB = ItemUseCB_EvolutionStone;

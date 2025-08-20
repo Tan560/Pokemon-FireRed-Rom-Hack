@@ -62,6 +62,7 @@ void ItemUseCB_TMHM(u8 taskId, TaskFunc func);
 void ItemUseCB_RareCandy(u8 taskId, TaskFunc func);
 void ItemUseCB_CapCandy(u8 taskId, TaskFunc func);
 void ItemUseCB_PortablePC(u8 taskId, TaskFunc func);
+void ItemUseCB_PermanentRepel(u8 taskId, TaskFunc func);
 void ItemUseCB_SacredAsh(u8 taskId, TaskFunc func);
 void ItemUseCB_EvolutionStone(u8 taskId, TaskFunc func);
 u8 GetItemEffectType(u16 item);
