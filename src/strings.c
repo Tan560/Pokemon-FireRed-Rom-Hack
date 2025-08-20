@@ -982,7 +982,6 @@ const u8 gString_QuitPlaying[] = _("Quit playing?");
 const u8 gString_SlotMachineControls[] = _("{DPAD_LEFTRIGHT}COMBOS {DPAD_DOWN}WAGER {A_BUTTON}STOP {B_BUTTON}EXIT");
 const u8 gText_TeachyTV[] = _("おしえテレビ");
 const u8 gText_End[] = _("おしまい");
-const u8 gText_PartyHealed[] = _("Your Pokémon were restored to full\nhealth.$");
 
 #include "data/text/teachy_tv.h"
 
