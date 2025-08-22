@@ -2,7 +2,7 @@
 import os
 import re
 import json
-from random import choice
+from random import choice, shuffle
 import pandas as pd
 
 # --- Configuration ---
@@ -49,11 +49,12 @@ MANUAL_ITEM_FILES = [
     "src/script_menu.c",
     "src/daycare.c"
 ]
-# NEW: Add any files you want to PREVENT from being item-randomized.
-# Common for PokeMarts, prize exchanges, etc. Please verify these paths for your project.
-EXCLUDED_ITEM_FILES = [
-    "src/data/pokemon_mart.c"
+# Commands on the same line as an ITEM_ that will PREVENT randomization. Case-insensitive.
+FORBIDDEN_ITEM_COMMANDS = [
+    "addhiddenitem",
 ]
+# Any other specific files you want to prevent from being item-randomized can be added here.
+EXCLUDED_ITEM_FILES = []
 ITEM_POOL_EXCLUSIONS = ["ITEM_NONE", "ITEM_BERRY_POUCH", "ITEM_TM_CASE"]
 PROTECTED_ITEMS = ["ITEM_NONE"]
 
@@ -67,7 +68,7 @@ def find_all_target_files(root_directory, filename):
             target_files.append(os.path.join(dirpath, filename))
     return target_files
 
-# --- Species Functions (Reworked for CSV and BST) ---
+# --- Species Functions ---
 
 def format_name_to_species_constant(name):
     """Converts a Pokémon name from the CSV to a SPECIES_CONSTANT format."""
@@ -211,65 +212,57 @@ def randomize_abilities(filepath, ability_pool):
     except Exception as e: print(f"   [ERROR] An unexpected error occurred with {filepath}: {e}")
 
 def get_all_items():
-    """Final corrected function to parse the specific items.json structure."""
-    regular_pool, key_item_pool = [], []
+    """Parses the items.json file and returns a pool of REGULAR items only."""
+    regular_pool = []
     try:
         with open(ITEM_JSON_FILE, "r", encoding="utf-8") as f:
             item_data = json.load(f)
     except FileNotFoundError:
         print(f"   [ERROR] Item data not found at {ITEM_JSON_FILE}. Aborting item randomization.")
-        return {'regular': [], 'key': []}
+        return []
     except json.JSONDecodeError:
         print(f"   [ERROR] Could not parse {ITEM_JSON_FILE}. It might be malformed. Aborting item randomization.")
-        return {'regular': [], 'key': []}
+        return []
 
     item_list = item_data.get("items", [])
-    
     if not item_list:
         print(f"   [ERROR] Could not find the 'items' list in {os.path.basename(ITEM_JSON_FILE)}. Aborting.")
-        return {'regular': [], 'key': []}
+        return []
 
     for item in item_list:
-        if not isinstance(item, dict):
-            continue
+        if not isinstance(item, dict): continue
         item_id = item.get("itemId")
         if not item_id or item_id in ITEM_POOL_EXCLUSIONS or item_id.startswith("ITEM_HM"):
             continue
-        
-        if item.get("pocket") == "POCKET_KEY_ITEMS":
-            key_item_pool.append(item_id)
-        else:
+        # CRITICAL CHANGE: Only add non-key items to the pool
+        if item.get("pocket") != "POCKET_KEY_ITEMS":
             regular_pool.append(item_id)
             
-    print(f"Found {len(regular_pool)} regular items and {len(key_item_pool)} Key Items for randomization.")
-    return {'regular': regular_pool, 'key': key_item_pool}
+    print(f"Found {len(regular_pool)} regular items to use in the shuffle pool.")
+    return regular_pool
 
-def randomize_items_in_file(filepath, item_pools):
-    item_pattern = re.compile(r"\bITEM_\w+\b")
-    all_known_items = {item: 'key' for item in item_pools['key']}
-    all_known_items.update({item: 'regular' for item in item_pools['regular']})
-    def replacement_logic(match):
-        original_item = match.group(0)
-        if original_item in PROTECTED_ITEMS: return original_item
-        item_type = all_known_items.get(original_item)
-        if item_type == 'key' and item_pools['key']: return choice(item_pools['key'])
-        elif item_type == 'regular' and item_pools['regular']: return choice(item_pools['regular'])
-        return original_item
+def apply_item_shuffle(filepath, item_map):
+    """Replaces items in a file based on the pre-shuffled item_map."""
+    relative_path = os.path.relpath(filepath, PROJECT_ROOT)
+    print(f"-> Shuffling items in {relative_path}...")
     try:
-        with open(filepath, "r", encoding="utf-8") as f: content = f.read()
-        relative_path = os.path.relpath(filepath, PROJECT_ROOT)
-        if "// RANDOMIZER_START" in content:
-            print(f"-> Markers found in {relative_path}. Processing marked sections...")
-            lines, new_lines, randomize_enabled = content.splitlines(True), [], False
-            for line in lines:
-                if "// RANDOMIZER_START" in line: randomize_enabled = True
-                elif "// RANDOMIZER_END" in line: randomize_enabled = False
-                new_lines.append(item_pattern.sub(replacement_logic, line) if randomize_enabled and "// RANDOMIZER_START" not in line else line)
-            final_content = "".join(new_lines)
-        else:
-            print(f"-> No markers found in {relative_path}. Processing entire file...")
-            final_content = item_pattern.sub(replacement_logic, content)
-        with open(filepath, "w", encoding="utf-8") as f: f.write(final_content)
+        with open(filepath, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+        
+        new_lines = []
+        for line in lines:
+            def line_replacer(match):
+                original_item = match.group(0)
+                if original_item in item_map and item_map[original_item]:
+                    return item_map[original_item].pop(0)
+                return original_item
+
+            new_line = re.sub(r'\bITEM_\w+\b', line_replacer, line)
+            new_lines.append(new_line)
+
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write("".join(new_lines))
+            
     except FileNotFoundError: print(f"   [ERROR] File not found: {relative_path}. Skipping.")
     except Exception as e: print(f"   [ERROR] An unexpected error occurred with {relative_path}: {e}")
 
@@ -317,35 +310,68 @@ if __name__ == "__main__":
         else:
             print("\nNo species files found to process.")
 
-    # --- Ability and Item Randomization ---
+    # --- Ability Randomization ---
     all_abilities = get_all_abilities()
     if all_abilities:
         print("\n--- Starting Ability Randomization ---")
         randomize_abilities(ABILITY_DATA_FILE, all_abilities)
         print("------------------------------------")
-    all_item_pools = get_all_items()
-    if all_item_pools['regular'] or all_item_pools['key']:
+
+    # --- Item SHUFFLE Randomization (Regular Items Only) ---
+    regular_item_pool = get_all_items()
+    if regular_item_pool:
         manual_item_files_full_path = [os.path.join(PROJECT_ROOT, path) for path in MANUAL_ITEM_FILES]
         auto_discovered_item_files = find_all_target_files(PROJECT_ROOT, AUTO_TARGET_FILENAME)
         
-        # Combine and find unique files
         unique_item_files = set(manual_item_files_full_path + auto_discovered_item_files)
         
-        # Build a set of excluded file paths
+        # --- DYNAMIC MART & DEPT STORE EXCLUSION ---
         excluded_files_full_path = {os.path.join(PROJECT_ROOT, path) for path in EXCLUDED_ITEM_FILES}
-        
-        # Filter out the excluded files
-        final_item_files_to_process = sorted([f for f in unique_item_files if f not in excluded_files_full_path])
+        maps_path = os.path.join(PROJECT_ROOT, 'data', 'maps')
+        if os.path.isdir(maps_path):
+            for dirpath, _, filenames in os.walk(maps_path):
+                if ('mart' in dirpath.lower() or 'CeladonCity_DepartmentStore_' in dirpath) and AUTO_TARGET_FILENAME in filenames:
+                    excluded_files_full_path.add(os.path.join(dirpath, AUTO_TARGET_FILENAME))
+
+        final_item_files_to_process = sorted([f for f in unique_item_files if os.path.normpath(f) not in excluded_files_full_path])
 
         if final_item_files_to_process:
-            print(f"\nFound {len(final_item_files_to_process)} total unique files to process for item randomization.")
-            for excluded_file in sorted(list(excluded_files_full_path)):
-                 if os.path.normpath(excluded_file) in unique_item_files:
-                    print(f"-> Skipping excluded file: {os.path.relpath(excluded_file, PROJECT_ROOT)}")
+            print("\n--- Preparing for Item Shuffle (Regular Items Only) ---")
             
-            print("\n--- Starting Item Randomization ---")
+            # 1. GATHER all REGULAR item locations
+            regular_locations = []
+            item_pattern = re.compile(r"\bITEM_\w+\b")
+            forbidden_lower = [cmd.lower() for cmd in FORBIDDEN_ITEM_COMMANDS]
+
             for file_path in final_item_files_to_process:
-                randomize_items_in_file(file_path, all_item_pools)
+                with open(file_path, "r", encoding='utf-8') as f:
+                    for line in f:
+                        if any(cmd in line.lower() for cmd in forbidden_lower):
+                            continue
+                        
+                        for match in item_pattern.finditer(line):
+                            item = match.group(0)
+                            if item in regular_item_pool:
+                                regular_locations.append(item)
+
+            print(f"Found {len(regular_locations)} regular item locations to shuffle.")
+
+            # 2. CREATE the shuffled pool for replacement
+            # This ensures a 1-to-1 swap of all found regular items
+            shuffled_pool = regular_locations[:]
+            shuffle(shuffled_pool)
+            
+            # 3. Create a map of {Original_Item: [List_Of_Shuffled_Items]}
+            item_map = {}
+            for i, original_item in enumerate(regular_locations):
+                if original_item not in item_map:
+                    item_map[original_item] = []
+                item_map[original_item].append(shuffled_pool[i])
+
+            # 4. Process the files, applying the shuffle map
+            print("\n--- Starting Item Shuffling ---")
+            for file_path in final_item_files_to_process:
+                apply_item_shuffle(file_path, item_map)
             print("------------------------------------")
         else:
             print("\nNo item files found to process.")
