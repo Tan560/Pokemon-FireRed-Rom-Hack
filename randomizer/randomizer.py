@@ -14,7 +14,7 @@ USE_BST_RANDOMIZATION = True  # SET TO FALSE to use the original "fully random" 
 # This script now prioritizes pokemon.csv. It will only fall back to base_stats.h if the CSV is not found.
 CSV_STATS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pokemon.csv")
 BASE_STATS_HEADER = os.path.join(PROJECT_ROOT, "src", "data", "pokemon", "base_stats.h") # Fallback only
-BST_SIMILARITY_RANGE = 45     # The +/- range for what's considered a "similar" BST.
+BST_SIMILARITY_RANGE = 70     # The +/- range for what's considered a "similar" BST.
 
 MANUAL_FILES_TO_RANDOMIZE = [
     "src/data/wild_encounters.h",
