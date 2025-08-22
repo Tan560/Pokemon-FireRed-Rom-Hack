@@ -2014,6 +2014,11 @@ bool8 UseRegisteredKeyItemOnField(void)
                 CreateTask(Task_UsePortablePC_FromField, 8);
                 return TRUE;
             }
+            else if (gSpecialVar_ItemId == ITEM_PERMANENT_REPEL)
+            {
+                CreateTask(Task_UsePermanentRepel_FromField, 8);
+                return TRUE;
+            }
             taskId = CreateTask(ItemId_GetFieldFunc(gSaveBlock1Ptr->registeredItem), 8);
             gTasks[taskId].data[3] = 1;
             return TRUE;

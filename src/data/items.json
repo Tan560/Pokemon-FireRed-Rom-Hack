@@ -6101,7 +6101,7 @@
       "registrability": 1,
       "pocket": "POCKET_KEY_ITEMS",
       "type": "ITEM_TYPE_BAG_MENU",
-      "fieldUseFunc": "FieldUseFunc_PermanentRepel",
+      "fieldUseFunc": "FieldUseFunc_PermanentRepel_FromBag",
       "battleUsage": 0,
       "battleUseFunc": "NULL",
       "secondaryId": 0
