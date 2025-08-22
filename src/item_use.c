@@ -433,12 +433,32 @@ void FieldUseFunc_CapCandy(u8 taskId)
     DoSetUpItemUseCallback(taskId);
 }
 
-void FieldUseFunc_PortablePC(u8 taskId)
+// Function #1: Specifically for the BAG MENU
+// Its only job is to properly close the bag and start the script.
+void FieldUseFunc_PortablePC_FromBag(u8 taskId)
 {
     ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
     DoSetUpItemUseCallback(taskId);
 }
 
+// Function #2: Specifically for the FIELD (Registered Use)
+// This is a self-contained task that handles the overworld action.
+void Task_UsePortablePC_FromField(u8 taskId)
+{
+    // State 0: Run the script
+    if (gTasks[taskId].data[0] == 0)
+    {
+        ScriptContext_SetupScript(EventScript_PortablePC_HealParty);
+        gTasks[taskId].data[0]++;
+    }
+    // State 1: Wait for the script to finish, then clean up.
+    else if (ScriptContext_IsEnabled() != TRUE)
+    {
+        UnfreezeObjectEvents();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+    }
+}
 void FieldUseFunc_PermanentRepel(u8 taskId)
 {
     PlaySE(SE_REPEL);
