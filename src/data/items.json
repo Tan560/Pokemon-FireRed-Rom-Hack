@@ -6067,7 +6067,7 @@
       "description_english": "A candy to level your pokemon.\\nIt raises the level of a POKéMON\\nto the level cap.",
       "importance": 0,
       "registrability": 0,
-      "pocket": "POCKET_ITEMS",
+      "pocket": "POCKET_KEY_ITEMS",
       "type": "ITEM_TYPE_PARTY_MENU",
       "fieldUseFunc": "FieldUseFunc_CapCandy",
       "battleUsage": 0,
@@ -6085,7 +6085,7 @@
       "registrability": 1,
       "pocket": "POCKET_KEY_ITEMS",
       "type": "ITEM_TYPE_BAG_MENU",
-      "fieldUseFunc": "FieldUseFunc_PortablePC",
+      "fieldUseFunc": "FieldUseFunc_PortablePC_FromBag",
       "battleUsage": 0,
       "battleUseFunc": "NULL",
       "secondaryId": 0
@@ -6101,7 +6101,7 @@
       "registrability": 1,
       "pocket": "POCKET_KEY_ITEMS",
       "type": "ITEM_TYPE_BAG_MENU",
-      "fieldUseFunc": "FieldUseFunc_PermanentRepel",
+      "fieldUseFunc": "FieldUseFunc_PermanentRepel_FromBag",
       "battleUsage": 0,
       "battleUseFunc": "NULL",
       "secondaryId": 0
